@@ -1,0 +1,64 @@
+﻿@model List<Department>
+<h1>Danh sách phòng ban</h1>
+
+<div class="row justify-content-between">
+    <p class="col-3">
+        <a asp-action="Create" class="btn btn-success">Thêm mới</a>
+    </p>
+    <p class="col-3">
+        <a asp-action="ImportExcel" class="btn btn-outline-primary ">Nhập Excel</a>
+        <a asp-action="ExportExcel" class="btn btn-outline-primary">Xuất Excel</a>
+    </p>
+</div>
+<div class="position-absolute end-0 top-0">
+    <!-- Search form with Bootstrap styles -->
+    <form asp-action="Index" method="get" class="form-inline">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Tìm.." name="searchString" value="">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-secondary">
+                    <i class="fa fa-search" aria-hidden="true"></i> Tìm
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].DepartmentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].DepartmentName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DepartmentId" class="btn btn-primary btn-sm">Sửa</a>
+                    <a asp-action="AddEmployees" asp-route-id="@item.DepartmentId" class="btn btn-secondary btn-sm">Thêm nhân viên</a>
+                    <a asp-action="Delete" asp-route-id="@item.DepartmentId" class="btn btn-danger btn-sm me-3">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\WebFormL1.props" />
+</Project>

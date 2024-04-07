@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Nhập Excel";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Nhập thông tin nhân viên từ Excel</h1>
+    </div>
+
+    <div class="alert alert-info">
+        Chỉ chấp nhận các định dạng file .xlsx, .xlsm
+    </div>
+
+    <form asp-action="ImportExcel" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">Chọn một file</label>
+            <input class="form-control" type="file" name="formFile" accept=".xlsx, .xlsm" />
+        </div>
+
+        <div>
+            <input type="submit" value="Nhập" class="btn btn-primary" /> |
+            <a asp-action="Index">Danh sách nhân viên</a>
+        </div>
+    </form>
+</div>
+
+@if (ViewData["ImportError"] != null)
+{
+    <p class="text-danger mt-2 ms-2">
+        @ViewData["ImportError"]
+    </p>
+}
+
+

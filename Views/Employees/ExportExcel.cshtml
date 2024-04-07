@@ -1,0 +1,146 @@
+﻿@model IEnumerable<WebFormL1.ViewModel.EmployeeViewModel>
+
+@{
+    ViewData["Title"] = "Xuất Excel";
+}
+
+<h1>Xuất thông tin nhân viên ra Excel</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+<div class="position-absolute end-0 top-0">
+    <!-- Search form with Bootstrap styles -->
+    <form asp-action="ExportExcel" method="get" class="form-inline">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Tìm.." name="searchString" value="@ViewBag.exportSearchString">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-secondary">
+                    <i class="fa fa-search" aria-hidden="true"></i> Tìm
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<form asp-action="ExportExcel" class="create-employee-form">
+    <p>
+        <input type="submit" value="Xuất" class="btn btn-primary" /> |
+        <a asp-action="Index">Danh sách nhân viên</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <input class="form-check-input selectAll" type="checkbox" value="" />
+                    <label class="form-check-label">
+                        Chọn hết
+                    </label>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EthnicityName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JobName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdentityCardNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProvinceName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DistrictName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CommuneName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumberOfDegrees)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="form-check-input select" name="employeeIdList" type="checkbox" value="@item.Id" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EthnicityName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.JobName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdentityCardNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProvinceName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DistrictName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CommuneName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumberOfDegrees)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.toast').toast('show');
+
+            $(".selectAll").click(function () {
+                $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+            });
+
+            $("input[type=checkbox]").click(function () {
+                if (!$(this).prop("checked")) {
+                    $(".selectAll").prop("checked", false);
+                }
+            });
+        });
+    </script>
+}

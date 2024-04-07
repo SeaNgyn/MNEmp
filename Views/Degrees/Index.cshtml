@@ -1,0 +1,82 @@
+﻿@model List<WebFormL1.ViewModel.DegreeViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Danh sách văn bằng</h1>
+<hr />
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+<dl >
+    <dt class="col-sm-2">
+        Nhân viên
+    </dt>
+    <dd class="col-sm-10">
+        @ViewData["employeeName"]
+    </dd>
+    <dt class="col-sm-2">
+        Số văn bằng
+    </dt>
+    <dd class="col-sm-10">
+        @ViewData["numberOfDegrees"]/3
+    </dd>
+</dl>
+
+<div class="row border border-secondary rounded">
+    <p>
+        <a asp-action="Create" class="btn btn-success mt-2" asp-route-employeeId="@ViewBag.employeeId">Thêm văn bằng</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].DateOfIssue)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].ExpirationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].ProvinceName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfIssue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpirationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProvinceName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm me-3">Xóa</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-controller="Employees" asp-action="Index">Danh sách nhân viên</a>
+</div>

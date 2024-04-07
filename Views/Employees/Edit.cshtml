@@ -1,0 +1,169 @@
+﻿@model WebFormL1.EditModel.EmployeeEditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Sửa thông tin nhân viên</h1>
+
+<hr />
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+<div class="row">
+    <div>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="DateOfBirth" class="control-label"></label>
+                    <input asp-for="DateOfBirth" class="form-control dobInput" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="EthnicId" class="control-label"></label>
+                    <select asp-for="EthnicId" class="form-select ethnics" asp-items="ViewBag.EthnicData">
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="EthnicId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="JobId" class="control-label"></label>
+                    <select asp-for="JobId" class="form-select careers" asp-items="ViewBag.JobData">
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="JobId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 checkBoxInput">
+                    <label asp-for="IdentifyCardNumber" class="control-label"></label>
+                    <input asp-for="IdentifyCardNumber" class="form-control checkBoxText" required title="Vui lòng hoàn thành thông tin" />
+                    <span asp-validation-for="IdentifyCardNumber" class="text-danger validTextCheckBox"></span>
+                    <div>
+                        <input id="citizenIdCheck" class="form-check-input check" type="checkbox" value="" />
+                        <label class="form-check-label" for="citizenIdCheck">
+                            Không có CCCD
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group col-md-3 checkBoxInput">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control checkBoxText" required title="Vui lòng hoàn thành thông tin" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger validTextCheckBox"></span>
+                    <div>
+                        <input id="phoneCheck" class="form-check-input check" type="checkbox" value="" />
+                        <label class="form-check-label" for="phoneCheck">
+                            Không có SĐT
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <h5>Địa chỉ</h5>
+                <div class="form-group col-md-3">
+                    <label asp-for="ProvinceId" class="control-label"></label>
+                    <select asp-for="ProvinceId" class="form-select" asp-items="ViewBag.ProvinceData" id="provinceId">
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="ProvinceId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="DistrictId" class="control-label"></label>
+                    <select asp-for="DistrictId" class="form-select" id="districtId" asp-items="ViewBag.DistrictData">
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="DistrictId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="CommuneId" class="control-label"></label>
+                    <select asp-for="CommuneId" class="form-select" id="communeId" asp-items="ViewBag.CommuneData">
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="CommuneId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Danh sách nhân viên</a>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $('.checkBoxInput').each(function (index, element) {
+            $(element).find('.check').click(function () {
+                $(element).find('.validTextCheckBox').toggle();
+                if ($(element).find('.check').prop('checked')) {
+                    $(element).find('.checkBoxText').val('').attr('disabled', 'disabled').removeAttr('required');
+                    return;
+                }
+                $(element).find('.checkBoxText').removeAttr('disabled').attr('required', 'required');
+            });
+        });
+        $(document).ready(function () {
+            getDistrictByProvinceId();
+        })
+        $("#provinceId").change(function () {
+            getDistrictByProvinceId();
+        });
+        var getDistrictByProvinceId = function () {
+            $.ajax(
+                {
+                    url: '@Url.Action("GetDistrictByProvince","Districts")',
+                    type: 'GET',
+                    data: {
+                        provinceId: $('#provinceId').val(),
+                    },
+                    success: function (data) {
+                        $('#districtId').html('');
+                        $(data).each(
+                            function (index, item) {
+                                $('#districtId').append('<option value="' + item.id + '">' + item.name + '</option>');
+                            }
+                        );
+                        $('#districtId').val($('#districtId option:first').val());
+                        $('#districtId').change();
+                    }
+                }
+            );
+        };
+        $(document).ready(function () {
+            getCommuneByDistrictId();
+        })
+        $("#districtId").change(function () {
+            getCommuneByDistrictId();
+        });
+        var getCommuneByDistrictId = function () {
+            $.ajax({
+                url: '@Url.Action("GetCommuneByDistrict","Communes")',
+                type: 'GET',
+                data: {
+                    districtId: $('#districtId').val(),
+                },
+                success: function (data) {
+                    $('#communeId').html('');
+                    $(data).each(function (index, item) {
+                        $('#communeId').append('<option value="' + item.id + '">' + item.name + '</option>');
+                    });
+                }
+            });
+        };
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
